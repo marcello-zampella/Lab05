@@ -1,28 +1,29 @@
 package it.polito.tdp.amagramma.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import it.polito.tdp.anagramma.DAO.anagrammaDAO;
 
 public class Model {
 	private ArrayList<Lettera> lettere;
-	private ArrayList<Parola> anagrammi;
+	private HashSet<Parola> anagrammi;
 	private ArrayList<Character> letterecontenute;
 	private anagrammaDAO an;
-	private int k;
+	private HashSet<String> dizionario;
 	
 	public Model () {
 		lettere= new ArrayList<Lettera>();
 		letterecontenute=new ArrayList<Character>();
-		anagrammi= new ArrayList<Parola>();
-		an= new anagrammaDAO();
-		
+		anagrammi= new HashSet<Parola>();
+		anagrammaDAO an= new anagrammaDAO();
+		dizionario=an.getDizionario();
 	}
 
 	
 	
-	public ArrayList<Parola> cercaAnagramma(String parola) {
-		k=0;
+	public HashSet<Parola> cercaAnagramma(String parola) {
 		lettere.clear();
 		letterecontenute.clear();
 		anagrammi.clear();
@@ -39,8 +40,6 @@ public class Model {
 		
 		
 		espandi( new ArrayList<Character>(), 0,  parola.length());
-		anagrammaDAO an= new anagrammaDAO();
-		System.out.println(k);
 		return anagrammi;
 		
 		
@@ -56,16 +55,14 @@ public class Model {
 	}
 	
 	void espandi(ArrayList<Character> parziale, int livello, int lettereTotali){
-		k++;
 		
+		//CONDIZIONE DI TERMINAZIONE
 		if(lettereTotali==parziale.size()) {
 			String temp = this.creaParola(parziale);
 			Parola p= new Parola();
 			p.setParola(temp);
-			p.setEsiste(an.parolaEsiste(temp));
-			if(!anagrammi.contains(p)) {
+			p.setEsiste(dizionario.contains(temp));
 			anagrammi.add(p);
-			}
 			return;
 		}
 		
@@ -74,7 +71,7 @@ public class Model {
 		
 		for(int q=0;q<lettereTotali;q++) {
 			int temp=0;
-			for(Character c: parziale) {
+			for(Character c: parziale) { //CONTA LE RICORRENZE
 				if(c==lettere.get(q).getCarattere())
 					temp++;
 			}
@@ -83,6 +80,7 @@ public class Model {
 		
 		//letterecontenute.add(c)
 		espandi(parziale,livello+1,lettereTotali);
+		//BACKTRACK
 		parziale.remove(livello);
 			}
 		}
