@@ -15,7 +15,7 @@ public class Model {
 		lettere= new ArrayList<Lettera>();
 		letterecontenute=new ArrayList<Character>();
 		anagrammi= new ArrayList<Parola>();
-		an= new anagrammaDAO();
+		 an= new anagrammaDAO();
 		
 	}
 
@@ -39,8 +39,6 @@ public class Model {
 		
 		
 		espandi( new ArrayList<Character>(), 0,  parola.length());
-		anagrammaDAO an= new anagrammaDAO();
-		System.out.println(k);
 		return anagrammi;
 		
 		
@@ -56,7 +54,6 @@ public class Model {
 	}
 	
 	void espandi(ArrayList<Character> parziale, int livello, int lettereTotali){
-		k++;
 		
 		if(lettereTotali==parziale.size()) {
 			String temp = this.creaParola(parziale);
